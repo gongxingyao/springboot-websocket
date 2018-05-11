@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello</title>
+</head>
+<script src="jquery-3.3.1.min.js"></script>
+<script src="sockjs.js"></script>
+<script type="application/javascript">
+    $(document).ready(function () {
+        var root = "ws://localhost:8080";
+        //建立socket连接
+        var sock;
+        if ('WebSocket' in window) {
+            sock = new WebSocket(root + "/socketServer");
+        } else if ('MozWebSocket' in window) {
+            sock = new MozWebSocket(root + "/socketServer");
+        } else {
+            sock = new SockJS(root + "/socketServer");
+        }
+        sock.onopen = function () {
+            //打开连接
+            alert("与服务器连接正常");
+        }
+        sock.onmessage = function (e) {
+            //收到推送
+            $("#showMessageArea").val(e.data) ;
+        };
+        sock.onerror = function () {
+            //连接异常
+            alert("与服务器链接异常")
+        };
+        sock.onclose = function () {
+            //连接关闭
+            alert("与服务器连接关闭")
+        }
+
+
+    });
+
+    function sendMessage() {
+        var message=$("#inputSendingMessage").val();
+        $.get("/send?message="+message);
+    }
+    function sendDelayMessage() {
+        var message=$("#inputSendingMessage").val();
+        $.get("/delayMessage?message="+message);
+    }
+
+</script>
+<body>
+<h1 align="center">Spring WebSocket Demo </h1>
+<h2 align="center">Create Time 2018年05月11日 15点58分 </h2>
+<div style="text-align: center"><textarea id="showMessageArea" cols="50" rows="10" placeholder="显示收到的消息" wrap="hard"></textarea></div>
+<div style="text-align: center"><textarea id="inputSendingMessage" cols="50" rows="10" placeholder="请输入要发送的消息" wrap="hard"></textarea></div>
+<div style="text-align: center"><input type="button" onclick="sendMessage()" value="BUTTON-发送信息"/></div>
+<div style="text-align: center"><input type="button" onclick="sendDelayMessage()" value="BUTTON-发送延迟消息信息"/></div>
+</body>
+</html>
