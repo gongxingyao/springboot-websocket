@@ -1,4 +1,4 @@
 # SpringBootWebSocket
 springboot+websocket的例子
 
-![](C:\Users\bignox\Desktop\demo.jpg)
+![https://github.com/gongxingyao/springboot-websocket/blob/master/demo.jpg]()
